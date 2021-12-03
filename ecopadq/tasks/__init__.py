@@ -1,2 +1,2 @@
-from tasks import *
-from datatask import *
+from .tasks import *
+#from datatask import *
