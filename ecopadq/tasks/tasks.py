@@ -1,6 +1,8 @@
 from celery import Celery
 import celeryconfig
-from dockertask import docker_task
+#from dockertask import docker_task
+from paramiko import SSHClient, AutoAddPolicy
+from os import getenv
 #from subprocess import call,STDOUT
 #from jinja2 import Template
 #from shutil import copyfile, move
@@ -14,8 +16,11 @@ from dockertask import docker_task
 #host= 'ecolab.cybercommons.org'
 #host_data_dir = os.environ["host_data_dir"] 
 ## "/home/ecopad/ecopad/data/static"
-#
-#
+
+client=SSHClient()
+client.set_missing_host_key_policy(AutoAddPolicy())
+client.load_system_host_keys()
+
 app = Celery()
 app.config_from_object(celeryconfig)
 ##New Example task
@@ -28,15 +33,31 @@ def add(a, b):
     result1 = a + b
     return result1
 
-@app.task()
-def test(pars):
-    task_id = str(test.request.id)
-    input_a = pars["test1"]
-    input_b = pars["test2"]
-    docker_opts = None
-    docker_cmd = "./test.o {0} {1}".format(input_a, input_b)
-    result = docker_task(docker_name="test", docker_opts=None, docker_command=docker_cmd, id=task_id)
-    return input_a + input_b
+@app.task(bind=True)
+def test(self, input_a, input_b):
+    # This is a prototype for the new interface
+    # The old implementation uses dockertask which is now deprecated
+    # The new implementation uses ssh (via the paramiko lib)
+    # This requires the sshd demom to be started on the container we are connecting
+    # The username and  passwords are shared via environ variables which are also used
+    # to initialize the containers
+    # Similar to the old implementation we share file paths instead of the actual data
+    # This is the reason why this function returns a result_file_path. 
+    # In this case this is the location of text file written by the fortran container.
+    # The javascript code of the frontend can see the return value of this function by querying the api.
+    # and so can find the loacation of the actual file. (In many of the old examples this is an image)
+    # The javascript code of the frontend (running in the browser of an ecopad user on a different machine) 
+    # then makes an request to the 
+    # webserver which can serve the file since the path points to a location under the 
+    # webroot directory.
+    task_id = str(self.request.id)
+    
+    client.connect('local_fortran_example',username=getenv('CELERY_SSH_USER'),password=getenv('CELERY_SSH_PASSWORD'))
+    result_file_path="/data/output_{0}.txt".format(task_id)
+    ssh_cmd = "./test {0} {1} {2}".format(input_a, input_b, result_file_path)
+    stdin, stdout, stderr = client.exec_command(ssh_cmd)
+    result = str(stdout.read())
+    return result_file_path
 #@task()
 #def sub(a, b):
 #    """ Example task that subtracts two numbers or strings
