@@ -1,6 +1,6 @@
 from celery import Celery
 import celeryconfig
-from dockertask import docker_task
+#from dockertask import docker_task
 #from subprocess import call,STDOUT
 #from jinja2 import Template
 #from shutil import copyfile, move
