@@ -1,6 +1,6 @@
 from celery import Celery
 import celeryconfig
-#from dockertask import docker_task
+from dockertask import docker_task
 #from subprocess import call,STDOUT
 #from jinja2 import Template
 #from shutil import copyfile, move
@@ -27,6 +27,16 @@ def add(a, b):
     """
     result1 = a + b
     return result1
+
+@app.task()
+def test(pars):
+    task_id = str(test.request.id)
+    input_a = pars["test1"]
+    input_b = pars["test2"]
+    docker_opts = None
+    docker_cmd = "./test.o {0} {1}".format(input_a, input_b)
+    result = docker_task(docker_name="test", docker_opts=None, docker_command=docker_cmd, id=task_id)
+    return input_a + input_b
 #@task()
 #def sub(a, b):
 #    """ Example task that subtracts two numbers or strings

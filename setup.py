@@ -10,8 +10,8 @@ setup(name='ecopadq',
 #          'requests',
 #          'jinja2',
 #      ],
-#     dependency_links=[
-#          'http://github.com/ouinformatics/dockertask/tarball/master#egg=dockertask-0.0',
-#      ],
+     dependency_links=[
+          'http://github.com/ouinformatics/dockertask/tarball/master#egg=dockertask-0.0',
+      ],
 #      include_package_data=True,
 )
