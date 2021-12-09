@@ -5,12 +5,13 @@ setup(name='ecopadq',
       version='0.0',
       packages= find_packages(),
 #      package_data={'ecopadq':['ecopadq/tasks/templates/*.tmpl']},
-#      install_requires=[
+      install_requires=[
+          dockertask
 #          'celery',
 #          'requests',
 #          'jinja2',
-#      ],
-     dependency_links=[
+      ],
+      dependency_links=[
           'http://github.com/ouinformatics/dockertask/tarball/master#egg=dockertask-0.0',
       ],
 #      include_package_data=True,
