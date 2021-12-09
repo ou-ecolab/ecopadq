@@ -6,7 +6,7 @@ setup(name='ecopadq',
       packages= find_packages(),
 #      package_data={'ecopadq':['ecopadq/tasks/templates/*.tmpl']},
       install_requires=[
-          dockertask
+          'dockertask'
 #          'celery',
 #          'requests',
 #          'jinja2',
