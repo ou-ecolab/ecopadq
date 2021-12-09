@@ -6,7 +6,7 @@ setup(name='ecopadq',
       packages= find_packages(),
 #      package_data={'ecopadq':['ecopadq/tasks/templates/*.tmpl']},
       install_requires=[
-          'dockertask @ git+git://github.com/ouinformatics/dockertask.git#egg=dockertask',
+          'dockertask @ git+git://github.com/ou-ecolab/dockertask.git@test#egg=dockertask',
 #          'celery',
 #          'requests',
 #          'jinja2',
