@@ -30,12 +30,12 @@ def add(a, b):
 
 @app.task()
 def test(pars):
-    task_id = str(test.request.id)
+    #task_id = str(test.request.id)
     input_a = pars["test1"]
     input_b = pars["test2"]
     docker_opts = None
     docker_cmd = "./test.o {0} {1}".format(input_a, input_b)
-    result = docker_task(docker_name="test", docker_opts=None, docker_command=docker_cmd, id=task_id)
+    result = docker_task(docker_name="test", docker_opts=None, docker_command=docker_cmd,id='23')# id=task_id)
     return input_a + input_b
 #@task()
 #def sub(a, b):
