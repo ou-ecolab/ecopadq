@@ -33,11 +33,11 @@ def test(input_a,input_b):
     task_id = str(test.request.id)
     client=SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
-    #client.load_system_host_keys()
+    client.load_system_host_keys()
     client.connect('local_fortran_example',username='mm')
     ssh_cmd = "./test {0} {1}".format(input_a, input_b)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
-    result = stdout.read()
+    result = str(stdout.read())
     #input_a = pars["test1"]
     #input_b = pars["test2"]
     #docker_opts = None
