@@ -1,6 +1,7 @@
 from celery import Celery
 import celeryconfig
-from dockertask import docker_task
+#from dockertask import docker_task
+from paramiko import SSHClient
 #from subprocess import call,STDOUT
 #from jinja2 import Template
 #from shutil import copyfile, move
@@ -14,8 +15,7 @@ from dockertask import docker_task
 #host= 'ecolab.cybercommons.org'
 #host_data_dir = os.environ["host_data_dir"] 
 ## "/home/ecopad/ecopad/data/static"
-#
-#
+
 app = Celery()
 app.config_from_object(celeryconfig)
 ##New Example task
@@ -29,15 +29,21 @@ def add(a, b):
     return result1
 
 @app.task()
-def test(pars):
+def test(input_a,input_b):
     task_id = str(test.request.id)
+    client=SSHClient()
+    client.load_system_host_keys()
+    client.connect('local_fortran_example',username='mm')
+    ssh_cmd = "./test {0} {1}".format(input_a, input_b)
+    stdin, stdout, stderr = client.exec_command(ssh_cmd)
+    result = stdout.read()
     #input_a = pars["test1"]
     #input_b = pars["test2"]
     #docker_opts = None
-    #docker_cmd = "./test.o {0} {1}".format(input_a, input_b)
+    #docker_cmd = "./test {0} {1}".format(input_a, input_b)
     #result = docker_task(docker_name="test", docker_opts=None, docker_command=docker_cmd, id=task_id)
     #return input_a + input_b
-    return test.request.id
+    return result 
 #@task()
 #def sub(a, b):
 #    """ Example task that subtracts two numbers or strings
