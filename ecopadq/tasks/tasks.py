@@ -1,7 +1,7 @@
 from celery import Celery
 import celeryconfig
 #from dockertask import docker_task
-from paramiko import SSHClient
+from paramiko import SSHClient,AutoAddPolicy
 #from subprocess import call,STDOUT
 #from jinja2 import Template
 #from shutil import copyfile, move
@@ -33,6 +33,7 @@ def test(input_a,input_b):
     task_id = str(test.request.id)
     client=SSHClient()
     client.load_system_host_keys()
+    client.set_missing_host_key_policy(AutoAddPolicy)
     client.connect('local_fortran_example',username='mm')
     ssh_cmd = "./test {0} {1}".format(input_a, input_b)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
