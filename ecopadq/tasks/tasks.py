@@ -2,6 +2,7 @@ from celery import Celery
 import celeryconfig
 #from dockertask import docker_task
 from paramiko import SSHClient, AutoAddPolicy
+from os import getenv
 #from subprocess import call,STDOUT
 #from jinja2 import Template
 #from shutil import copyfile, move
@@ -15,6 +16,10 @@ from paramiko import SSHClient, AutoAddPolicy
 #host= 'ecolab.cybercommons.org'
 #host_data_dir = os.environ["host_data_dir"] 
 ## "/home/ecopad/ecopad/data/static"
+
+client=SSHClient()
+client.set_missing_host_key_policy(AutoAddPolicy())
+client.load_system_host_keys()
 
 app = Celery()
 app.config_from_object(celeryconfig)
@@ -31,10 +36,7 @@ def add(a, b):
 @app.task()
 def test(input_a,input_b):
     task_id = str(test.request.id)
-    client=SSHClient()
-    client.set_missing_host_key_policy(AutoAddPolicy())
-    client.load_system_host_keys()
-    client.connect('local_fortran_example',username='celery',password='test')
+    client.connect('local_fortran_example',username=getenv('CELERY_SSH_USER'),password='test')
     ssh_cmd = "./test {0} {1}".format(input_a, input_b)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
     result = str(stdout.read())
