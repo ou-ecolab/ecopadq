@@ -34,7 +34,7 @@ def test(input_a,input_b):
     client=SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
     client.load_system_host_keys()
-    client.connect('local_fortran_example',username='mm')
+    client.connect('local_fortran_example',username='celery',password='test')
     ssh_cmd = "./test {0} {1}".format(input_a, input_b)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
     result = str(stdout.read())
