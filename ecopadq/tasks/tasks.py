@@ -36,7 +36,7 @@ def add(a, b):
 @app.task()
 def test(input_a,input_b):
     task_id = str(test.request.id)
-    client.connect('local_fortran_example',username=getenv('CELERY_SSH_USER'),password='test')
+    client.connect('local_fortran_example',username=getenv('CELERY_SSH_USER'),password=getenv('CELERY_SSH_PASSWORD')
     ssh_cmd = "./test {0} {1}".format(input_a, input_b)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
     result = str(stdout.read())
