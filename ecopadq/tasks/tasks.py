@@ -33,9 +33,10 @@ def add(a, b):
     result1 = a + b
     return result1
 
-@app.task()
-def test(input_a,input_b):
-    task_id = str(test.request.id)
+@app.task(bind=True)
+def test(self, input_a, input_b):
+    task_id = str(self.request.id)
+    
     client.connect('local_fortran_example',username=getenv('CELERY_SSH_USER'),password=getenv('CELERY_SSH_PASSWORD'))
     ssh_cmd = "./test {0} {1}".format(input_a, input_b)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
@@ -46,7 +47,7 @@ def test(input_a,input_b):
     #docker_cmd = "./test {0} {1}".format(input_a, input_b)
     #result = docker_task(docker_name="test", docker_opts=None, docker_command=docker_cmd, id=task_id)
     #return input_a + input_b
-    return result 
+    return task_id 
 #@task()
 #def sub(a, b):
 #    """ Example task that subtracts two numbers or strings
