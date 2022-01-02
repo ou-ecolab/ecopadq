@@ -38,8 +38,8 @@ def test(self, input_a, input_b):
     task_id = str(self.request.id)
     
     client.connect('local_fortran_example',username=getenv('CELERY_SSH_USER'),password=getenv('CELERY_SSH_PASSWORD'))
-    result_file_path="/data/{0}.txt".format(task_id)
-    ssh_cmd = "./test {0} {1} {2}".format(input_a, input_b,result_file_path)
+    result_file_path="/data/output_{0}.txt".format(task_id)
+    ssh_cmd = "./test {0} {1} {2}".format(input_a, input_b, result_file_path)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
     result = str(stdout.read())
     #input_a = pars["test1"]
