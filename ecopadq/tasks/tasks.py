@@ -48,7 +48,7 @@ def test(self, input_a, input_b):
     #docker_cmd = "./test {0} {1}".format(input_a, input_b)
     #result = docker_task(docker_name="test", docker_opts=None, docker_command=docker_cmd, id=task_id)
     #return input_a + input_b
-    return (result_file_path) 
+    return (result_file_path,result) 
 #@task()
 #def sub(a, b):
 #    """ Example task that subtracts two numbers or strings
