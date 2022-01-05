@@ -41,7 +41,7 @@ def test(self, input_a, input_b):
     result_file_path="/data/output_{0}.txt".format(task_id)
     ssh_cmd = "./test {0} {1} {2}".format(input_a, input_b, result_file_path)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
-    result = str(stdout.read())
+    result = str(stdout.read()).strip()
     #input_a = pars["test1"]
     #input_b = pars["test2"]
     #docker_opts = None
