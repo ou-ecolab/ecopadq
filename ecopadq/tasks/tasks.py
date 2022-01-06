@@ -42,10 +42,13 @@ def test(self, input_a, input_b):
     # The username and  passwords are shared via environ variables which are also used
     # to initialize the containers
     # Similar to the old implementation we share file paths instead of the actual data
-    # This is the reason why this function returns a result_file_path.
+    # This is the reason why this function returns a result_file_path. 
     # In this case this is the location of text file written by the fortran container.
-    # The javascript code of the frontend can find this "result" by querying the api
-    # and the webserver can serve it since the path points to a location under the 
+    # The javascript code of the frontend can see the return value of this function by querying the api.
+    # and so can find the loacation of the actual file. (In many of the old examples this is an image)
+    # The javascript code of the frontend (running in the browser of an ecopad user on a different machine) 
+    # then makes an request to the 
+    # webserver which can serve the file since the path points to a location under the 
     # webroot directory.
     task_id = str(self.request.id)
     
@@ -54,7 +57,7 @@ def test(self, input_a, input_b):
     ssh_cmd = "./test {0} {1} {2}".format(input_a, input_b, result_file_path)
     stdin, stdout, stderr = client.exec_command(ssh_cmd)
     result = str(stdout.read())
-    return result_file_path}
+    return result_file_path
 #@task()
 #def sub(a, b):
 #    """ Example task that subtracts two numbers or strings
